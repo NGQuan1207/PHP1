@@ -1,0 +1,16 @@
+-khái niệm oop
+-khái niệm class và obj
+    class:khuôn mãu tạo ra đối tượng có cùng thuộc tính và phương thức
+    obj: object là các đối tượng tạo từ class
+        thuộc tính:
+-khởi tạo class và obj trong php
+
+-Truy xuất đến thuộc tính và phương thức
+    +trong class: truy xuất thông qua từ khóa $this
+    +ngoài class: truy xuất thông qua đối tượng
+
+-Cấp độ truy cập:
+    +public: truy suất ở moi nơi (trong,ngoài class, class con)
+    +protected: truy xuất treong class
+    +private: truy xuất trong class
+    

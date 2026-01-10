@@ -1,0 +1,5 @@
+-khái niệm oop
+-khái niệm class và obj
+    class:khuôn mãu tạo ra đối tượng có cùng thuộc tính và phương thức
+    obj: object là các đối tượng tạo từ class
+-khởi tạo class và obj trong php
