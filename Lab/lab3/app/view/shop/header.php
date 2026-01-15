@@ -13,8 +13,8 @@
 </header>
 
 <nav>
-    <a href="../layout/index.html">Trang Chủ</a>
-    <a href="../layout/product.html">Sản phẩm</a>
-    <a href="../layout/about.html">Giới Thiệu</a>
-    <a href="../layout/contact.html">Liên Hệ</a>
-</nav>
+    <a href="index.php">Trang Chủ</a>
+    <a href="index.php?page=product">Sản phẩm</a>
+    <a href="index.php?page=about">Giới Thiệu</a>
+    <a href="index.php?page=contact">Liên Hệ</a>
+</nav>  
