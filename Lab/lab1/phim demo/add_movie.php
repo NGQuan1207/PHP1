@@ -1,51 +1,42 @@
 <?php
 require_once 'movies_data.php';
 
-$success_message = '';
-$error_message = '';
+if (!isset($_SESSION['is_logged_in'])) {
+    header('Location: login.php');
+}
 
+$message = '';
 
 if ($_POST) {
-    $tieuDe = trim($_POST['tieuDe']);
+    $tieuDe = $_POST['tieuDe'];
     $theLoai = $_POST['theLoai'];
-    $luotXem = (int)$_POST['luotXem'];
+    $luotXem = $_POST['luotXem'];
     $ngayTao = $_POST['ngayTao'];
     
-    if (empty($tieuDe) || empty($theLoai) || $luotXem < 0 || empty($ngayTao)) {
-        $error_message = "Vui lòng điền đầy đủ thông tin bắt buộc!";
-    } else {
-        $uploadDir = 'img/';
-        $fileName = '';
-        
+    if (!empty($tieuDe) && !empty($theLoai) && !empty($luotXem) && !empty($ngayTao)) {
         if (isset($_FILES['hinhAnh']) && $_FILES['hinhAnh']['error'] == 0) {
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'webp'];
-            $fileInfo = pathinfo($_FILES['hinhAnh']['name']);
-            $fileExt = strtolower($fileInfo['extension']);
+            $fileName = time() . '_' . $_FILES['hinhAnh']['name'];
+            $uploadPath = 'img/' . $fileName;
             
-            if (in_array($fileExt, $allowedTypes)) {
-                $fileName = uniqid() . '_' . time() . '.' . $fileExt;
-                $uploadPath = $uploadDir . $fileName;
+            if (move_uploaded_file($_FILES['hinhAnh']['tmp_name'], $uploadPath)) {
+                $phimMoi = [
+                    'hinhAnh' => $uploadPath,
+                    'tieuDe' => $tieuDe,
+                    'theLoai' => $theLoai,
+                    'luotXem' => $luotXem,
+                    'ngayTao' => $ngayTao
+                ];
                 
-                if (move_uploaded_file($_FILES['hinhAnh']['tmp_name'], $uploadPath)) {
-                    $phimMoi = [
-                        'hinhAnh' => $uploadPath,
-                        'tieuDe' => $tieuDe,
-                        'theLoai' => $theLoai,
-                        'luotXem' => $luotXem,
-                        'ngayTao' => $ngayTao
-                    ];
-                    
-                    themPhimMoi($phimMoi);
-                    $success_message = "Phim '$tieuDe' đã được thêm thành công!";
-                } else {
-                    $error_message = "Lỗi khi upload file hình ảnh!";
-                }
+                themPhimMoi($phimMoi);
+                $message = "Thêm phim thành công!";
             } else {
-                $error_message = "Chỉ cho phép upload file jpg, jpeg, png, webp!";
+                $message = "Lỗi upload file!";
             }
         } else {
-            $error_message = "Vui lòng chọn file hình ảnh!";
+            $message = "Vui lòng chọn file hình ảnh!";
         }
+    } else {
+        $message = "Vui lòng điền đầy đủ thông tin!";
     }
 }
 ?>
@@ -154,14 +145,22 @@ if ($_POST) {
 <body>
     <header>
         <h1>BHZ Movies</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="#">Movies</a></li>
-                <li><a href="#">TV Shows</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
+        <div class="header-right">
+            <nav>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="#">Movies</a></li>
+                    <li><a href="#">TV Shows</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </nav>
+            <span style="color: white; margin-right: 20px;">
+                <?php echo $_SESSION['username']; ?>
+            </span>
+            <a href="logout.php" class="btn-add-movie">
+                Đăng xuất
+            </a>
+        </div>
     </header>
 
     <main>

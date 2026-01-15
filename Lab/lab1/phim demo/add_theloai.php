@@ -1,35 +1,26 @@
 <?php
 require_once 'movies_data.php';
 
-$success_message = '';
-$error_message = '';
+if (!isset($_SESSION['is_logged_in'])) {
+    header('Location: login.php');
+}
+
+$message = '';
 
 if ($_POST) {
-    $ten = trim($_POST['ten']);
-    $bieuTuong = trim($_POST['bieuTuong']);
+    $ten = $_POST['ten'];
+    $bieuTuong = $_POST['bieuTuong'];
     
-    if (empty($ten) || empty($bieuTuong)) {
-        $error_message = "Vui lòng điền đầy đủ thông tin bắt buộc!";
-    } else {
-        $daTonTai = false;
-        foreach ($theLoai as $item) {
-            if (strtolower($item['ten']) === strtolower($ten)) {
-                $daTonTai = true;
-                break;
-            }
-        }
+    if (!empty($ten) && !empty($bieuTuong)) {
+        $theLoaiMoi = [
+            'bieuTuong' => $bieuTuong,
+            'ten' => $ten
+        ];
         
-        if ($daTonTai) {
-            $error_message = "Thể loại '$ten' đã tồn tại!";
-        } else {
-            $theLoaiMoi = [
-                'bieuTuong' => $bieuTuong,
-                'ten' => $ten
-            ];
-            
-            themTheLoaiMoi($theLoaiMoi);
-            $success_message = "Thể loại '$ten' đã được thêm thành công!";
-        }
+        themTheLoaiMoi($theLoaiMoi);
+        $message = "Thêm thể loại thành công!";
+    } else {
+        $message = "Vui lòng điền đầy đủ thông tin!";
     }
 }
 ?>
@@ -181,8 +172,14 @@ if ($_POST) {
                     <li><a href="#">About</a></li>
                 </ul>
             </nav>
+            <span style="color: white; margin-right: 20px;">
+                <?php echo $_SESSION['username']; ?>
+            </span>
             <a href="add_movie.php" class="btn-add-movie">
-                <i class="fas fa-plus"></i> Thêm Phim
+                Thêm Phim
+            </a>
+            <a href="logout.php" class="btn-add-movie">
+                Đăng xuất
             </a>
         </div>
     </header>

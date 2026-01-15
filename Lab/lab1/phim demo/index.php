@@ -1,6 +1,9 @@
 <?php
-// Include file dữ liệu phim
 require_once 'movies_data.php';
+
+if (!isset($_SESSION['is_logged_in'])) {
+    header('Location: login.php');
+}
 
 $phimMoi = $tatCaPhim;
 usort($phimMoi, function($a, $b) {
@@ -39,11 +42,17 @@ $phimXemNhieu = array_slice($phimXemNhieu, 0, 3);
                     <li><a href="#">About</a></li>
                 </ul>
             </nav>
+            <span style="color: white; margin-right: 20px;">
+                Chào <?php echo $_SESSION['username']; ?>!
+            </span>
             <a href="add_movie.php" class="btn-add-movie">
-                <i class="fas fa-plus"></i> Thêm Phim
+                Thêm Phim
             </a>
-            <a href="add_theloai.php" class="btn-add-movie" style="background: linear-gradient(45deg, #6f42c1, #5a32a3);">
-                <i class="fas fa-tags"></i> Thêm Thể Loại
+            <a href="add_theloai.php" class="btn-add-movie">
+                Thêm Thể Loại
+            </a>
+            <a href="logout.php" class="btn-add-movie">
+                Đăng xuất
             </a>
         </div>
     </header>
