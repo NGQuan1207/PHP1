@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<?php
+include 'app/controller/homecontroller.php';
+$controller = new HomeController();
+
+include 'app/view/shop/header.php';
+
+if(!isset($_GET['page'])) {
+    include 'app/view/shop/home.php';
+} else {
+    $page = $_GET['page'];
+    $controller->$page();
+}
+
+include 'app/view/shop/footer.php';
+?>
