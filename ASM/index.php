@@ -1,4 +1,6 @@
 <?php
+include_once 'app/model/Database.php';
+$db = new Database();
 include 'app/controller/homecontroller.php';
 $controller = new HomeController();
 
