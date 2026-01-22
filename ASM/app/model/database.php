@@ -26,6 +26,12 @@ class Database {
         return $stmt->setFetchMode(PDO::FETCH_ASSOC);
     }
 
+    //phương thức CRUD: create, read, update, delete
+    function action($sql) {
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+    }
+
     function __destruct() {
         $this->conn = null;
     }
