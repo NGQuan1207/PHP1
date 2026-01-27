@@ -44,14 +44,16 @@ CREATE TABLE cars (
 );
 
 -- ===================================================================
--- 4. BẢNG CUSTOMERS (KHÁCH HÀNG)
+-- 4. BẢNG USERS (NGƯỜI DÙNG/KHÁCH HÀNG)
 -- ===================================================================
-CREATE TABLE customers (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     phone VARCHAR(15),
-    address TEXT
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ===================================================================
@@ -59,7 +61,7 @@ CREATE TABLE customers (
 -- ===================================================================
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
+    user_id INT NOT NULL,
     car_id INT NOT NULL,
     order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     total_price DECIMAL(15,2) NOT NULL,
@@ -69,7 +71,7 @@ CREATE TABLE orders (
     status ENUM('Đang xử lý', 'Hoàn thành', 'Đã hủy') DEFAULT 'Đang xử lý',
     
     -- Foreign Key constraints
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (car_id) REFERENCES cars(car_id)
 );
 
@@ -129,16 +131,17 @@ INSERT INTO cars (car_name, brand_id, type_id, price, year, color, description, 
 -- VinFast
 ('VinFast Fadil', 8, 3, 400000000, 2022, 'Trắng', 'Hatchback Việt Nam chất lượng cao', 'public/layout/img/hinh4.webp');
 
--- Thêm khách hàng
-INSERT INTO customers (full_name, email, phone, address) VALUES 
-('Nguyễn Văn An', 'nguyenvanan@gmail.com', '0901234567', '123 Đường Lê Lợi, Quận 1, TP.HCM'),
-('Trần Thị Bình', 'tranthibinh@gmail.com', '0907654321', '456 Đường Nguyễn Huệ, Quận 1, TP.HCM'),
-('Lê Văn Cường', 'levancuong@gmail.com', '0912345678', '789 Đường Hàn Thuyên, Hai Châu, Đà Nẵng'),
-('Phạm Thị Dung', 'phamthidung@gmail.com', '0913456789', '321 Đường Trần Hưng Đạo, Ba Đình, Hà Nội'),
-('Hoàng Văn Em', 'hoangvanem@gmail.com', '0914567890', '654 Đường Võ Văn Tần, Quận 3, TP.HCM');
+-- Thêm người dùng (với mật khẩu mã hóa MD5 đơn giản cho demo)
+INSERT INTO users (full_name, email, password, phone, address) VALUES 
+('Nguyễn Văn An', 'nguyenvanan@gmail.com', MD5('123456'), '0901234567', '123 Đường Lê Lợi, Quận 1, TP.HCM'),
+('Trần Thị Bình', 'tranthibinh@gmail.com', MD5('123456'), '0907654321', '456 Đường Nguyễn Huệ, Quận 1, TP.HCM'),
+('Lê Văn Cường', 'levancuong@gmail.com', MD5('123456'), '0912345678', '789 Đường Hàn Thuyên, Hai Châu, Đà Nẵng'),
+('Phạm Thị Dung', 'phamthidung@gmail.com', MD5('123456'), '0913456789', '321 Đường Trần Hưng Đạo, Ba Đình, Hà Nội'),
+('Hoàng Văn Em', 'hoangvanem@gmail.com', MD5('123456'), '0914567890', '654 Đường Võ Văn Tần, Quận 3, TP.HCM'),
+('Admin User', 'admin@mqauto.com', MD5('admin123'), '0999999999', 'MQAuto Headquarters');
 
 -- Thêm đơn hàng mẫu
-INSERT INTO orders (customer_id, car_id, total_price, payment_method, down_payment, loan_months, status) VALUES 
+INSERT INTO orders (user_id, car_id, total_price, payment_method, down_payment, loan_months, status) VALUES 
 (1, 1, 570000000, 'Tiền mặt', 570000000, 0, 'Hoàn thành'),
 (2, 3, 1350000000, 'Vay ngân hàng', 300000000, 60, 'Đang xử lý'),
 (3, 5, 950000000, 'Trả góp', 200000000, 36, 'Hoàn thành'),

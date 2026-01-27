@@ -9,10 +9,14 @@ class HomeController {
         require_once 'app/model/car.php';
         $carModel = new Car();
         $cars = $carModel->getAllCars();
+        $carTypes = $carModel->getAllCarTypes();
         include 'app/view/shop/home.php';
     }
 
     function product() {
+        require_once 'app/model/car.php';
+        $carModel = new Car();
+        $cars = $carModel->getAllCars();
         include 'app/view/shop/product.php';
     }
 
