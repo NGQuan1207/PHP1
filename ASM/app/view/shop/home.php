@@ -1,13 +1,13 @@
 <section class="relative bg-gray-900 min-h-[500px] flex items-center justify-center overflow-hidden">
     <img src="public/layout/img/banner01.jpg" alt="Banner Car" class="absolute inset-0 w-full h-full object-cover opacity-50">
-    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative z-10 max-w-4xl mx-auto text-center px-6 py-20">
         <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">Chào mừng đến với <span class="text-gray-300">MQAuto</span></h1>
         <p class="text-lg md:text-xl text-gray-200 mb-8">Nơi bạn tìm thấy những mẫu xe phù hợp nhất cho mình.</p>
         <a href="index.php?page=product" class="inline-block bg-gray-800 hover:bg-black text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200">Tìm xe có sẵn</a>
     </div>
 </section>
-<!-- Danh mục phổ biến -->
+
 <section class="bg-gray-800 py-6">
     <div class="max-w-5xl mx-auto px-4">
         <h3 class="text-xl font-bold text-white mb-4 text-center">Loại xe</h3>
@@ -51,8 +51,8 @@
     <script>
         function scrollCategories(direction) {
             const container = document.getElementById('categoryContainer');
-            const cardWidth = 180 + 16; // card width + gap
-            const scrollAmount = cardWidth * 3; // scroll 3 cards at a time
+            const cardWidth = 180 + 16; 
+            const scrollAmount = cardWidth * 3;
             
             container.scrollBy({
                 left: direction * scrollAmount,

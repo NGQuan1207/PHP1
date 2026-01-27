@@ -19,5 +19,23 @@
             <a href="index.php?page=about" class="hover:text-blue-400 transition">Giới thiệu</a>
             <a href="index.php?page=contact" class="hover:text-blue-400 transition">Liên hệ</a>
         </nav>
+        
+        <!-- User Icon/Button -->
+        <div class="flex items-center gap-4">
+            <button class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                <span>Tài khoản</span>
+            </button>
+            
+            <!-- Admin Login Link -->
+            <a href="index.php?page=admin&action=login" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <span>Admin</span>
+            </a>
+        </div>
     </div>
 </header>

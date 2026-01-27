@@ -12,20 +12,20 @@ class Database {
                 $this->conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
                 // set the PDO error mode to exception
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                // echo "<div style='background: green; color: white; padding: 10px; text-align: center;'>✅ Kết nối database thành công!</div>";
+                // echo "Kết nối database thành công!</div>";
                 } catch(PDOException $e) {
-                echo "<div style='background: red; color: white; padding: 10px; text-align: center;'>❌ Kết nối thất bại: " . $e->getMessage() . "</div>";
+                echo "Kết nối thất bại: " . $e->getMessage() . "</div>";
             }
     }
 
-    //phương thức lấy ra tất cả dữ liệu (select all)
+    
     function getall($sql) {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->setFetchMode(PDO::FETCH_ASSOC);
     }
 
-    //phương thức CRUD: create, read, update, delete
+    
     function action($sql) {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
