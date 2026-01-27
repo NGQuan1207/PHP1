@@ -7,7 +7,7 @@ $controller = new HomeController();
 include 'app/view/shop/header.php';
 
 if(!isset($_GET['page'])) {
-    include 'app/view/shop/home.php';
+    $controller->home();
 } else {
     $page = $_GET['page'];
     $controller->$page();

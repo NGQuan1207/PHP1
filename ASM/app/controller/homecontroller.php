@@ -6,6 +6,9 @@ class HomeController {
     }
 
     function home() {
+        require_once 'app/model/car.php';
+        $carModel = new Car();
+        $cars = $carModel->getAllCars();
         include 'app/view/shop/home.php';
     }
 
