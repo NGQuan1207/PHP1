@@ -35,5 +35,38 @@ class Car {
             return [];
         }
     }
+
+    public function getCarbyid($id): array {
+        try {
+            $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 
+                    JOIN brands b ON c.brand_id = b.brand_id 
+                    JOIN car_types t ON c.type_id = t.type_id 
+                    WHERE c.car_id = ?";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->execute([$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result : [];
+        } catch(PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "</div>";
+            return [];
+        }
+    }
+
+    public function getRecomendedcar(): array {
+        try {
+            $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 
+                    JOIN brands b ON c.brand_id = b.brand_id 
+                    JOIN car_types t ON c.type_id = t.type_id 
+                    ORDER BY c.price ASC 
+                    LIMIT 4";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch(PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "</div>";
+            return [];
+        }
+    }
 }
 ?>

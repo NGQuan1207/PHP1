@@ -14,7 +14,7 @@
                     <h3 class="font-semibold text-lg text-white mb-2"><?php echo htmlspecialchars($car['car_name']); ?></h3>
                     <p class="text-gray-300 font-bold mb-2">Giá: <?php echo number_format($car['price'], 0, ',', '.'); ?> VNĐ</p>
                     <p class="text-gray-300 text-sm mb-4"><?php echo htmlspecialchars($car['description']); ?></p>
-                    <button class="w-full bg-gray-700 hover:bg-black text-white font-semibold py-2 rounded-lg transition-colors duration-200">Xem chi tiết</button>
+                    <a href="index.php?page=detail&id=<?php echo $car['car_id']; ?>" class="block w-full bg-gray-700 hover:bg-black text-white font-semibold py-2 rounded-lg transition-colors duration-200 text-center">Xem chi tiết</a>
                 </div>
             <?php endforeach; ?>
         <?php else : ?>

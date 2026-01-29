@@ -1,6 +1,6 @@
 <section class="relative bg-gray-900 min-h-[500px] flex items-center justify-center overflow-hidden">
-    <img src="public/layout/img/banner01.jpg" alt="Banner Car" class="absolute inset-0 w-full h-full object-cover opacity-50">
-    <div class="absolute inset-0 bg-black/50"></div>
+    <img src="public/layout/img/banner01.jpg" alt="Banner Car" class="absolute inset-0 w-full h-full object-cover opacity-80">
+    <div class="absolute inset-0 bg-black/10"></div>
     <div class="relative z-10 max-w-4xl mx-auto text-center px-6 py-20">
         <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">Chào mừng đến với <span class="text-gray-300">MQAuto</span></h1>
         <p class="text-lg md:text-xl text-gray-200 mb-8">Nơi bạn tìm thấy những mẫu xe phù hợp nhất cho mình.</p>
@@ -92,9 +92,9 @@
                             </div>
                         </div>
                     </div>
-                    <button class="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-all duration-200">
+                    <a href="index.php?page=detail&id=<?php echo $car['car_id']; ?>" class="block w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-all duration-200 text-center">
                         Xem chi tiết
-                    </button>
+                    </a>
                 </div>
             <?php endforeach; ?>
         <?php else : ?>

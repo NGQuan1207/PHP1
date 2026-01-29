@@ -27,6 +27,15 @@ class HomeController {
     function contact() {
         include 'app/view/shop/contact.php';
     }
+    
+    function detail() {
+        $carId = $_GET['id'] ?? 1;
+        require_once 'app/model/car.php';
+        $carModel = new Car();
+        $car = $carModel->getCarbyid($carId);
+        $recommendedCars = $carModel->getRecomendedcar();
+        include 'app/view/shop/detail.php';
+    }
 };
 //test
 ?>
