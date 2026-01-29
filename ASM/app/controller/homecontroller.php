@@ -33,7 +33,12 @@ class HomeController {
         require_once 'app/model/car.php';
         $carModel = new Car();
         $car = $carModel->getCarbyid($carId);
-        $recommendedCars = $carModel->getRecomendedcar();
+        
+        // Get similar cars based on current car's type and brand
+        $typeId = !empty($car['type_id']) ? $car['type_id'] : null;
+        $brandId = !empty($car['brand_id']) ? $car['brand_id'] : null;
+        $recommendedCars = $carModel->getRecomendedcar($typeId, $brandId);
+        
         include 'app/view/shop/detail.php';
     }
 };

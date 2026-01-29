@@ -52,15 +52,29 @@ class Car {
         }
     }
 
-    public function getRecomendedcar(): array {
+    public function getRecomendedcar($typeId = null, $brandId = null): array {
         try {
             $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 
                     JOIN brands b ON c.brand_id = b.brand_id 
-                    JOIN car_types t ON c.type_id = t.type_id 
-                    ORDER BY c.price ASC 
-                    LIMIT 4";
+                    JOIN car_types t ON c.type_id = t.type_id ";
+            $params = [];
+            $conditions = [];
+            
+            if ($typeId) {
+                $conditions[] = "c.type_id = ?";
+                $params[] = $typeId;
+            }
+            
+            if ($brandId) {
+                $conditions[] = "c.brand_id = ?";
+                $params[] = $brandId;
+            }
+            if (!empty($conditions)) {
+                $sql .= "WHERE " . implode(" OR ", $conditions) . " ";
+            }
+            $sql .= "ORDER BY c.price ASC LIMIT 4";
             $stmt = $this->db->conn->prepare($sql);
-            $stmt->execute();
+            $stmt->execute($params);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch(PDOException $e) {
