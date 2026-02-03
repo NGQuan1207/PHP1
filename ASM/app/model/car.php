@@ -52,6 +52,37 @@ class Car {
         }
     }
 
+    public function phantrang($lim, $offset): array {
+        try {
+            $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 
+                    JOIN brands b ON c.brand_id = b.brand_id 
+                    JOIN car_types t ON c.type_id = t.type_id 
+                    LIMIT ? OFFSET ?";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->bindValue(1, (int)$lim, PDO::PARAM_INT);
+            $stmt->bindValue(2, (int)$offset, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch(PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "</div>";
+            return [];
+        }
+    }
+
+    public function getTotalCars(): int {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM cars";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch(PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "</div>";
+            return 0;
+        }
+    }
+
     public function getRecomendedcar($typeId = null, $brandId = null): array {
         try {
             $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 

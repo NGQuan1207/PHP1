@@ -16,7 +16,14 @@ class HomeController {
     function product() {
         require_once 'app/model/car.php';
         $carModel = new Car();
-        $cars = $carModel->getAllCars();
+        $sp_1_trang = 6;
+        $trang_hien_tai = isset($_GET['trang']) ? (int)$_GET['trang'] : 1;
+        $tongsp = $carModel->getTotalCars();
+        $sotrang = ceil($tongsp / $sp_1_trang);
+        $offset = ($trang_hien_tai - 1) * $sp_1_trang;
+        
+        $cars = $carModel->phantrang($sp_1_trang, $offset);
+        
         include 'app/view/shop/product.php';
     }
 

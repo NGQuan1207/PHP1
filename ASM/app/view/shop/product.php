@@ -23,12 +23,35 @@
             </div>
         <?php endif; ?>
     </div>
-</div>
-</main>
-            <a href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
+    <?php if (isset($sotrang) && $sotrang > 1) : ?>
+    <div class="flex justify-center mt-8">
+        <div class="flex space-x-2">
+            <?php if ($trang_hien_tai > 1) : ?>
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai - 1; ?>" 
+                   class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
+                   « Trước
+                </a>
+            <?php endif; ?>
+            
+            <?php for ($i = 1; $i <= $sotrang; $i++) : ?>
+                <?php if ($i == $trang_hien_tai) : ?>
+                    <span class="px-4 py-2 bg-blue-600 text-white rounded font-bold"><?php echo $i; ?></span>
+                <?php else : ?>
+                    <a href="index.php?page=product&trang=<?php echo $i; ?>" 
+                       class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
+                       <?php echo $i; ?>
+                    </a>
+                <?php endif; ?>
+            <?php endfor; ?>
+            
+            <?php if ($trang_hien_tai < $sotrang) : ?>
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai + 1; ?>" 
+                   class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
+                   Sau »
+                </a>
+            <?php endif; ?>
         </div>
     </div>
+    <?php endif; ?>
 </div>
 </main>
