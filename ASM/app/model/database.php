@@ -18,14 +18,15 @@ class Database {
             }
     }
 
-    
-    function getall($sql) {
+    // phương thức lấy ra tất cả dữ liệu:
+    function getAll($sql) {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        return $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        // set the resulting array to associative
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+    // phương thức thêm xoá sửa, update
     function action($sql) {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();

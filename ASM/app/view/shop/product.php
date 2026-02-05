@@ -4,6 +4,26 @@
         <h2 class="text-4xl font-bold mb-4 text-white">Danh sách xe đang bán</h2>
         <p class="text-gray-400">Khám phá bộ sưu tập xe của chúng tôi</p>
     </div>
+    
+    <!-- Category Filter Section -->
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold text-white mb-4">Lọc theo loại xe:</h3>
+        <div class="flex flex-wrap gap-3">
+            <a href="index.php?page=product" 
+               class="px-4 py-2 rounded-lg transition-colors <?php echo !isset($_GET['type_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'; ?>">
+                Tất cả
+            </a>
+            <?php if (!empty($carTypes)) : ?>
+                <?php foreach ($carTypes as $type) : ?>
+                    <a href="index.php?page=product&type_id=<?php echo $type['type_id']; ?>" 
+                       class="px-4 py-2 rounded-lg transition-colors <?php echo (isset($_GET['type_id']) && $_GET['type_id'] == $type['type_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'; ?>">
+                        <?php echo htmlspecialchars($type['type_name']); ?>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+    
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php if (!empty($cars)) : ?>
             <?php foreach ($cars as $car) : ?>
@@ -26,8 +46,11 @@
     <?php if (isset($sotrang) && $sotrang > 1) : ?>
     <div class="flex justify-center mt-8">
         <div class="flex space-x-2">
+            <?php 
+            $type_param = isset($_GET['type_id']) ? '&type_id=' . $_GET['type_id'] : '';
+            ?>
             <?php if ($trang_hien_tai > 1) : ?>
-                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai - 1; ?>" 
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai - 1; ?><?php echo $type_param; ?>" 
                    class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                    « Trước
                 </a>
@@ -37,7 +60,7 @@
                 <?php if ($i == $trang_hien_tai) : ?>
                     <span class="px-4 py-2 bg-blue-600 text-white rounded font-bold"><?php echo $i; ?></span>
                 <?php else : ?>
-                    <a href="index.php?page=product&trang=<?php echo $i; ?>" 
+                    <a href="index.php?page=product&trang=<?php echo $i; ?><?php echo $type_param; ?>" 
                        class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                        <?php echo $i; ?>
                     </a>
@@ -45,7 +68,7 @@
             <?php endfor; ?>
             
             <?php if ($trang_hien_tai < $sotrang) : ?>
-                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai + 1; ?>" 
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai + 1; ?><?php echo $type_param; ?>" 
                    class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                    Sau »
                 </a>

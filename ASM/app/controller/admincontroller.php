@@ -36,8 +36,13 @@ class AdminController {
             header('Location: index.php?page=admin&action=login');
             exit();
         }
-        include_once 'app/model/Database.php';
-        $db = new Database();
+        
+        // Load car data using same method as home/product pages
+        require_once 'app/model/car.php';
+        $carModel = new Car();
+        $cars = $carModel->getAllCars();
+        $carTypes = $carModel->getAllCarTypes();
+        
         include 'app/view/admin/dashboard.php';
     }
 }

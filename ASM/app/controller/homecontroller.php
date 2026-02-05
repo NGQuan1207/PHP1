@@ -1,28 +1,60 @@
 <?php
+require_once 'app/model/car.php';
 
 class HomeController {
+    private $car;
+    
     function __construct() {
-        
+        $this->car = new Car();
     }
 
     function home() {
-        require_once 'app/model/car.php';
-        $carModel = new Car();
-        $cars = $carModel->getAllCars();
-        $carTypes = $carModel->getAllCarTypes();
+        $cars = $this->car->getAllCars();
+        $carTypes = $this->car->getAllCarTypes();
+        
+        
+        if(!isset($_GET['trang'])) {
+            $page_number = 1;
+        } else {
+            $page_number = $_GET['trang'];
+        }
+        $lim = 6;
+        $tong_sp = count($cars);
+        $sotrang = ceil($tong_sp/$lim);
+        $offset = ($page_number-1)*$lim;
+        $sp_phantrang = $this->car->phantrang($lim, $offset);
+        
         include 'app/view/shop/home.php';
     }
 
     function product() {
-        require_once 'app/model/car.php';
-        $carModel = new Car();
+        $carTypes = $this->car->getAllCarTypes();
+        
+        $selected_type = isset($_GET['type_id']) ? $_GET['type_id'] : null;
+        
+        if($selected_type) {
+            $car_all = $this->car->getCarsByType($selected_type);
+        } else {
+            $car_all = $this->car->getAllCars();
+        }
+        
+        if(!isset($_GET['trang'])) {
+            $trang_hien_tai = 1;
+        } else {
+            $trang_hien_tai = $_GET['trang'];
+        }
         $sp_1_trang = 6;
-        $trang_hien_tai = isset($_GET['trang']) ? (int)$_GET['trang'] : 1;
-        $tongsp = $carModel->getTotalCars();
+        $tongsp = count($car_all);
         $sotrang = ceil($tongsp / $sp_1_trang);
         $offset = ($trang_hien_tai - 1) * $sp_1_trang;
         
-        $cars = $carModel->phantrang($sp_1_trang, $offset);
+       
+        if($selected_type) {
+            
+            $cars = array_slice($car_all, $offset, $sp_1_trang);
+        } else {
+            $cars = $this->car->phantrang($sp_1_trang, $offset);
+        }
         
         include 'app/view/shop/product.php';
     }
@@ -36,19 +68,17 @@ class HomeController {
     }
     
     function detail() {
-        $carId = $_GET['id'] ?? 1;
-        require_once 'app/model/car.php';
-        $carModel = new Car();
-        $car = $carModel->getCarbyid($carId);
-        
-        // Get similar cars based on current car's type and brand
-        $typeId = !empty($car['type_id']) ? $car['type_id'] : null;
-        $brandId = !empty($car['brand_id']) ? $car['brand_id'] : null;
-        $recommendedCars = $carModel->getRecomendedcar($typeId, $brandId);
+        if(isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $car_dt = $this->car->getCarbyid($id);
+            if(!empty($car_dt)) {
+                $car = $car_dt[0]; 
+                $recommendedCars = $this->car->getRecomendedcar($car['type_id'], $car['brand_id']);
+            }
+        }
         
         include 'app/view/shop/detail.php';
     }
-};
-//test
+}
 ?>
 
