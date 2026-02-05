@@ -26,7 +26,7 @@ class AdminController {
     }
     
     public function logout() {
-        session_start();
+        // session_start();
         session_destroy();
         include 'app/view/admin/logout.php';
     }
