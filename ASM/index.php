@@ -20,11 +20,17 @@ if(isset($_GET['page']) && $_GET['page'] == 'admin') {
         case 'dashboard':
             $adminController->dashboard();
             break;
+        case 'add_car':
+            $adminController->add_car();
+            break;
+        case 'delete_car':
+            $adminController->delete_car();
+            break;
         default:
             $adminController->login();
     }
 } else {
-    // Handle regular shop routes
+    
     include 'app/controller/homecontroller.php';
     $controller = new HomeController();
     

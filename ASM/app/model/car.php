@@ -67,5 +67,22 @@ class Car {
                 WHERE c.type_id = {$type_id}";
         return $this->db->getAll($sql);
     }
+
+    // phương thức thêm xe mới
+    public function addCar($car_name, $brand_id, $type_id, $price, $description, $image_url) {
+        $sql = "INSERT INTO cars (car_name, brand_id, type_id, price, description, image_url) 
+                VALUES ('$car_name', '$brand_id', '$type_id', '$price', '$description', '$image_url')";
+        $this->db->action($sql);
+    }
+    // phương thức xoá xe
+    public function deleteCar($car_id) {
+        $sql = "DELETE FROM cars WHERE car_id = $car_id";
+        return $this->db->action($sql);
+    }
+    // phương thức lấy tất cả thương hiệu
+    public function getAllBrands(): array {
+        $sql = "SELECT brand_id, brand_name FROM brands ORDER BY brand_name";
+        return $this->db->getAll($sql);
+    }
 }
 ?>
