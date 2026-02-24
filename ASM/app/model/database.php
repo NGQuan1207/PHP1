@@ -28,8 +28,12 @@ class Database {
 
     // phương thức thêm xoá sửa, update
     function action($sql) {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
+        try {
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            return false;
+        }
     }
 
     function __destruct() {

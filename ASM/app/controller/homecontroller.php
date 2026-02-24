@@ -1,11 +1,14 @@
 <?php
 require_once 'app/model/car.php';
+require_once 'app/model/user.php';
 
 class HomeController {
     private $car;
+    private $user;
     
     function __construct() {
         $this->car = new Car();
+        $this->user = new User();
     }
 
     function home() {
@@ -78,6 +81,128 @@ class HomeController {
         }
         
         include 'app/view/shop/detail.php';
+    }
+    
+    // Đăng ký người dùng
+    function register() {
+        $message = '';
+        $success = false;
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $full_name = $_POST['full_name'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+            $confirm_password = $_POST['confirm_password'] ?? '';
+            $phone = $_POST['phone'] ?? null;
+            $address = $_POST['address'] ?? null;
+            
+            // Validation
+            if(!$full_name || !$email || !$password) {
+                $message = 'Vui lòng điền đầy đủ thông tin bắt buộc!';
+            } elseif($password !== $confirm_password) {
+                $message = 'Xác nhận mật khẩu không khớp!';
+            } elseif(strlen($password) < 6) {
+                $message = 'Mật khẩu phải có ít nhất 6 ký tự!';
+            } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = 'Email không hợp lệ!';
+            } elseif($this->user->emailExists($email)) {
+                $message = 'Email đã được sử dụng!';
+            } else {
+                // Đăng ký thành công
+                $result = $this->user->register($full_name, $email, $password, $phone, $address);
+                if($result) {
+                    $message = 'Đăng ký thành công! Bạn có thể đăng nhập ngay.';
+                    $success = true;
+                } else {
+                    $message = 'Có lỗi xảy ra trong quá trình đăng ký! Vui lòng thử lại.';
+                }
+            }
+        }
+        
+        include 'app/view/shop/register.php';
+    }
+    
+    // Đăng nhập người dùng
+    function login() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // Nếu đã đăng nhập, chuyển về trang chủ
+        if(isset($_SESSION['user'])) {
+            header('Location: index.php');
+            exit();
+        }
+        
+        $message = '';
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+            
+            if(!$email || !$password) {
+                $message = 'Vui lòng nhập email và mật khẩu!';
+            } else {
+                $user = $this->user->login($email, $password);
+                if($user) {
+                    $_SESSION['user'] = $user;
+                    header('Location: index.php');
+                    exit();
+                } else {
+                    $message = 'Email hoặc mật khẩu không đúng!';
+                }
+            }
+        }
+        
+        include 'app/view/shop/login.php';
+    }
+    
+    // Đăng xuất
+    function logout() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        session_unset();
+        session_destroy();
+        header('Location: index.php');
+        exit();
+    }
+    
+    // Trang thông tin cá nhân
+    function profile() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if(!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit();
+        }
+        
+        $message = '';
+        $user = $_SESSION['user'];
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $full_name = $_POST['full_name'] ?? '';
+            $phone = $_POST['phone'] ?? null;
+            $address = $_POST['address'] ?? null;
+            
+            if(!$full_name) {
+                $message = 'Tên không được để trống!';
+            } else {
+                if($this->user->updateUser($user['user_id'], $full_name, $phone, $address)) {
+                    // Cập nhật session
+                    $_SESSION['user']['full_name'] = $full_name;
+                    $_SESSION['user']['phone'] = $phone;
+                    $_SESSION['user']['address'] = $address;
+                    $user = $_SESSION['user'];
+                    $message = 'Cập nhật thông tin thành công!';
+                } else {
+                    $message = 'Có lỗi xảy ra khi cập nhật!';
+                }
+            }
+        }
+        
+        include 'app/view/shop/profile.php';
     }
 }
 ?>
