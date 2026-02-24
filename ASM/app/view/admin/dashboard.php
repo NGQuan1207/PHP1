@@ -29,81 +29,42 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="px-4 py-6 sm:px-0">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-gray-800 border border-gray-700 overflow-hidden shadow-lg rounded-lg">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
                                 <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                                     <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        <path fill-rule="evenodd" d="M4 15a1 1 0 004 0V5a1 1 0 011-1h4a1 1 0 011 1v10a1 1 0 004 0V5a3 3 0 00-3-3H7a3 3 0 00-3 3v10z" clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-400 truncate">Tổng sản phẩm</dt>
-                                    <dd class="text-lg font-medium text-white">15</dd>
+                                    <dt class="text-sm font-medium text-gray-400 truncate">Tổng xe</dt>
+                                    <dd class="text-lg font-medium text-white"><?php echo $carCount; ?></dd>
                                 </dl>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="bg-gray-800 border border-gray-700 overflow-hidden shadow-lg rounded-lg">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
                                     <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                                     </svg>
                                 </div>
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Đơn hàng</dt>
-                                    <dd class="text-lg font-medium text-gray-900">8</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Khách hàng</dt>
-                                    <dd class="text-lg font-medium text-gray-900">24</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.9 1 3 1.9 3 3V7H1V9H3V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V9H21ZM5 3H14.17L19 7.83V19H5V3Z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Doanh thu</dt>
-                                    <dd class="text-lg font-medium text-gray-900">2.5M VNĐ</dd>
+                                    <dt class="text-sm font-medium text-gray-400 truncate">Loại xe</dt>
+                                    <dd class="text-lg font-medium text-white"><?php echo $carTypeCount; ?></dd>
                                 </dl>
                             </div>
                         </div>
@@ -137,11 +98,12 @@
                                             </div>
                                         </div>
                                         <div class="ml-4 flex space-x-2">
-                                            <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" title="Chỉnh sửa">
+                                            <a href="index.php?page=admin&action=edit_car&id=<?php echo $car['car_id']; ?>" 
+                                               class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" title="Chỉnh sửa">
                                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                                                 </svg>
-                                            </button>
+                                            </a>
                                             <a href="index.php?page=admin&action=delete_car&id=<?php echo $car['car_id']; ?>" 
                                                class="p-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors" 
                                                title="Xoá"
@@ -170,6 +132,72 @@
                                 </svg>
                                 Thêm xe mới
                             </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="mt-8">
+                <div class="bg-gray-800 border border-gray-700 shadow-lg rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-white">Danh sách loại xe</h3>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-gray-400"><?php echo count($carTypes); ?> loại xe</span>
+                                <a href="index.php?page=admin&action=add_car_type" class="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"></path>
+                                    </svg>
+                                    Thêm loại xe
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <?php if (!empty($carTypes)): ?>
+                                <?php foreach ($carTypes as $type): ?>
+                                    <div class="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                                        <div class="flex items-center">
+                                           
+                                            <div class="w-16 h-10 bg-gray-600 rounded-md overflow-hidden flex-shrink-0">
+                                                <?php if (!empty($type['img'])): ?>
+                                                    <img src="<?php echo htmlspecialchars($type['img']); ?>" 
+                                                         alt="<?php echo htmlspecialchars($type['type_name']); ?>"
+                                                         class="w-full h-full object-cover">
+                                                <?php else: ?>
+                                                    <div class="w-full h-full flex items-center justify-center">
+                                                        <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                            <path fill-rule="evenodd" d="M4 15a1 1 0 004 0V5a1 1 0 011-1h4a1 1 0 011 1v10a1 1 0 004 0V5a3 3 0 00-3-3H7a3 3 0 00-3 3v10z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                            
+                                            <div class="ml-4 flex-1">
+                                                <h4 class="text-white font-semibold text-sm"><?php echo htmlspecialchars($type['type_name']); ?></h4>
+                                                <p class="text-gray-400 text-xs mt-1">ID: <?php echo $type['type_id']; ?></p>
+                                            </div>
+                                            <div class="ml-4 flex items-center">
+                                                <a href="index.php?page=admin&action=edit_car_type&id=<?php echo $type['type_id']; ?>" 
+                                                   class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center justify-center" title="Chỉnh sửa">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="col-span-full text-center text-gray-400 py-8">
+                                    <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                                    </svg>
+                                    <p>Không có loại xe nào trong cơ sở dữ liệu.</p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

@@ -26,6 +26,15 @@ if(isset($_GET['page']) && $_GET['page'] == 'admin') {
         case 'delete_car':
             $adminController->delete_car();
             break;
+        case 'edit_car':
+            $adminController->edit_car();
+            break;
+        case 'add_car_type':
+            $adminController->add_car_type();
+            break;
+        case 'edit_car_type':
+            $adminController->edit_car_type();
+            break;
         default:
             $adminController->login();
     }
