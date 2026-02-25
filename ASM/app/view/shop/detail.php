@@ -74,12 +74,12 @@
                 
 
                 <div class="flex flex-wrap gap-4">
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
-                        Liên hệ mua xe
-                    </button>
-                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition">
-                        Đặt lịch xem xe
-                    </button>
+                    <a href="index.php?page=consultation&car_id=<?php echo $car['car_id']; ?>" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition inline-block">
+                        Liên hệ tư vấn
+                    </a>
+                    <a href="index.php?page=test_drive&car_id=<?php echo $car['car_id']; ?>" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition inline-block">
+                        Đặt lịch lái thử
+                    </a>
                     <?php if(isset($_SESSION['user'])): ?>
                     <button onclick="toggleWishlist(<?php echo $car['car_id']; ?>, this)" 
                             class="<?php echo isset($isInWishlist) && $isInWishlist ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-red-600'; ?> text-white px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2 heart-btn">

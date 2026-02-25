@@ -66,6 +66,8 @@ class HomeController {
             $car_all = $this->car->getAllCars();
         }
         
+        $userWishlist = $this->getUserWishlistArray();
+        
         if(!isset($_GET['trang'])) {
             $trang_hien_tai = 1;
         } else {
@@ -76,13 +78,7 @@ class HomeController {
         $sotrang = ceil($tongsp / $sp_1_trang);
         $offset = ($trang_hien_tai - 1) * $sp_1_trang;
         
-       
-        if($selected_type) {
-            
-            $cars = array_slice($car_all, $offset, $sp_1_trang);
-        } else {
-            $cars = $this->car->phantrang($sp_1_trang, $offset);
-        }
+        $cars = array_slice($car_all, $offset, $sp_1_trang);
         
         include 'app/view/shop/product.php';
     }
@@ -316,6 +312,44 @@ class HomeController {
         $wishlistItems = $this->wishlist->getUserWishlist($user_id);
         
         include 'app/view/shop/wishlist.php';
+    }
+    
+    // Trang liên hệ tư vấn
+    function consultation() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $car_id = $_GET['car_id'] ?? null;
+        $car = null;
+        
+        if($car_id) {
+            $car_dt = $this->car->getCarbyid($car_id);
+            if(!empty($car_dt)) {
+                $car = $car_dt[0];
+            }
+        }
+        
+        include 'app/view/shop/consultation.php';
+    }
+    
+    // Trang đặt lịch lái thử
+    function test_drive() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $car_id = $_GET['car_id'] ?? null;
+        $car = null;
+        
+        if($car_id) {
+            $car_dt = $this->car->getCarbyid($car_id);
+            if(!empty($car_dt)) {
+                $car = $car_dt[0];
+            }
+        }
+        
+        include 'app/view/shop/test_drive.php';
     }
 }
 ?>
