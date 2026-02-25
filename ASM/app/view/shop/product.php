@@ -28,8 +28,18 @@
         <?php if (!empty($cars)) : ?>
             <?php foreach ($cars as $car) : ?>
                 <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-gray-500 transition-all duration-200">
-                    <div class="w-full h-40 bg-gray-700 rounded-lg overflow-hidden mb-4">
+                    <div class="relative w-full h-40 bg-gray-700 rounded-lg overflow-hidden mb-4">
                         <img src="<?php echo !empty($car['image_url']) ? $car['image_url'] : 'public/layout/img/hinh1.webp'; ?>" alt="<?php echo htmlspecialchars($car['car_name']); ?>" class="w-full h-full object-cover">
+                
+                        <?php if(isset($_SESSION['user'])): ?>
+                        <?php $inWishlist = in_array($car['car_id'], $userWishlist); ?>
+                        <button onclick="toggleWishlist(<?php echo $car['car_id']; ?>, this)" 
+                                class="absolute top-2 right-2 <?php echo $inWishlist ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-red-600'; ?> text-white p-2 rounded-full shadow-lg transition-colors duration-200 heart-btn">
+                            <svg class="w-4 h-4" <?php echo $inWishlist ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor"'; ?> viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                        <?php endif; ?>
                     </div>
                     <h3 class="font-semibold text-lg text-white mb-2"><?php echo htmlspecialchars($car['car_name']); ?></h3>
                     <p class="text-gray-300 font-bold mb-2">Giá: <?php echo number_format($car['price'], 0, ',', '.'); ?> VNĐ</p>
@@ -78,3 +88,69 @@
     <?php endif; ?>
 </div>
 </main>
+
+
+<script>
+function toggleWishlist(carId, button) {
+   
+    const svg = button.querySelector('svg');
+    const isInWishlist = svg.getAttribute('fill') === 'currentColor';
+    
+    const action = isInWishlist ? 'remove_from_wishlist' : 'add_to_wishlist';
+    
+    fetch('index.php?page=' + action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'car_id=' + carId
+    })
+    .then(response => {
+      
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text(); 
+    })
+    .then(text => {
+     
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Response is not valid JSON:', text);
+            throw new Error('Response is not valid JSON');
+        }
+        
+        if(data.success) {
+          
+            if(isInWishlist) {
+                
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                button.classList.remove('bg-red-600');
+                button.classList.add('bg-gray-600');
+            } else {
+              
+                svg.setAttribute('fill', 'currentColor');
+                svg.setAttribute('stroke', 'none');
+                button.classList.remove('bg-gray-600');
+                button.classList.add('bg-red-600');
+            }
+            
+          
+            const originalText = button.title;
+            button.title = data.message;
+            setTimeout(() => {
+                button.title = originalText;
+            }, 2000);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+        alert('Có lỗi xảy ra, vui lòng thử lại');
+    });
+}
+</script>

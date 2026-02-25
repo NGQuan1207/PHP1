@@ -66,10 +66,20 @@
 <div class="max-w-6xl mx-auto px-6 py-12">
     <h2 class="text-3xl font-bold mb-8 text-center text-white">Danh sách xe mới về</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <?php if (!empty($cars)) : ?>
-            <?php foreach ($cars as $car) : ?>
+        <?php if (!empty($sp_phantrang)) : ?>
+            <?php foreach ($sp_phantrang as $car) : ?>
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300 border border-gray-700">
-                    <div class="bg-gray-700 rounded-xl p-4 mb-4">
+                    <div class="bg-gray-700 rounded-xl p-4 mb-4 relative">
+             
+                        <?php if(isset($_SESSION['user'])): ?>
+                        <?php $inWishlist = in_array($car['car_id'], $userWishlist); ?>
+                        <button onclick="toggleWishlist(<?php echo $car['car_id']; ?>, this)" 
+                                class="absolute top-2 right-2 <?php echo $inWishlist ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-red-600'; ?> text-white p-2 rounded-full shadow-lg transition-colors duration-200 heart-btn z-10">
+                            <svg class="w-4 h-4" <?php echo $inWishlist ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor"'; ?> viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                        <?php endif; ?>
                         <div class="text-left mb-3">
                             <h3 class="font-bold text-white text-lg"><?php echo htmlspecialchars($car['car_name']); ?></h3>
                             <p class="text-gray-400 text-sm"><?php echo $car['year']; ?> năm sản xuất</p>
@@ -107,3 +117,67 @@
 </main>
 
 
+<script>
+function toggleWishlist(carId, button) {
+
+    const svg = button.querySelector('svg');
+    const isInWishlist = svg.getAttribute('fill') === 'currentColor';
+    
+    const action = isInWishlist ? 'remove_from_wishlist' : 'add_to_wishlist';
+    
+    fetch('index.php?page=' + action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'car_id=' + carId
+    })
+    .then(response => {
+      
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(text => {
+ 
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Response is not valid JSON:', text);
+            throw new Error('Response is not valid JSON');
+        }
+        
+        if(data.success) {
+          
+            if(isInWishlist) {
+               
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                button.classList.remove('bg-red-600');
+                button.classList.add('bg-gray-600');
+            } else {
+               
+                svg.setAttribute('fill', 'currentColor');
+                svg.setAttribute('stroke', 'none');
+                button.classList.remove('bg-gray-600');
+                button.classList.add('bg-red-600');
+            }
+            
+        
+            const originalText = button.title;
+            button.title = data.message;
+            setTimeout(() => {
+                button.title = originalText;
+            }, 2000);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+        alert('Có lỗi xảy ra, vui lòng thử lại');
+    });
+}
+</script>

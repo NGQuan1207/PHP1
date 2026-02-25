@@ -43,15 +43,22 @@ if(isset($_GET['page']) && $_GET['page'] == 'admin') {
     include 'app/controller/homecontroller.php';
     $controller = new HomeController();
     
-    include 'app/view/shop/header.php';
+
+    $page = $_GET['page'] ?? 'home';
+    $isAjaxWishlistRequest = in_array($page, ['add_to_wishlist', 'remove_from_wishlist']);
+    
+    if (!$isAjaxWishlistRequest) {
+        include 'app/view/shop/header.php';
+    }
     
     if(!isset($_GET['page'])) {
         $controller->home();
     } else {
-        $page = $_GET['page'];
         $controller->$page();
     }
     
-    include 'app/view/shop/footer.php';
+    if (!$isAjaxWishlistRequest) {
+        include 'app/view/shop/footer.php';
+    }
 }
 ?>

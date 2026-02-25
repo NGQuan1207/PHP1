@@ -1,20 +1,41 @@
 <?php
 require_once 'app/model/car.php';
 require_once 'app/model/user.php';
+require_once 'app/model/wishlist.php';
 
 class HomeController {
     private $car;
     private $user;
+    private $wishlist;
     
     function __construct() {
         $this->car = new Car();
         $this->user = new User();
+        $this->wishlist = new Wishlist();
+    }
+    
+    private function getUserWishlistArray() {
+        $userWishlist = [];
+        if(isset($_SESSION['user'])) {
+            $user_id = $_SESSION['user']['user_id'];
+            $wishlistItems = $this->wishlist->getUserWishlist($user_id);
+            foreach($wishlistItems as $item) {
+                $userWishlist[] = $item['car_id'];
+            }
+        }
+        return $userWishlist;
     }
 
     function home() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $cars = $this->car->getAllCars();
         $carTypes = $this->car->getAllCarTypes();
-        
+
+        // Lấy danh sách xe yêu thích của user
+        $userWishlist = $this->getUserWishlistArray();
         
         if(!isset($_GET['trang'])) {
             $page_number = 1;
@@ -31,6 +52,10 @@ class HomeController {
     }
 
     function product() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $carTypes = $this->car->getAllCarTypes();
         
         $selected_type = isset($_GET['type_id']) ? $_GET['type_id'] : null;
@@ -71,12 +96,22 @@ class HomeController {
     }
     
     function detail() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
             $car_dt = $this->car->getCarbyid($id);
             if(!empty($car_dt)) {
                 $car = $car_dt[0]; 
                 $recommendedCars = $this->car->getRecomendedcar($car['type_id'], $car['brand_id']);
+                
+                $isInWishlist = false;
+                if(isset($_SESSION['user'])) {
+                    $user_id = $_SESSION['user']['user_id'];
+                    $isInWishlist = $this->wishlist->isInWishlist($user_id, $car['car_id']);
+                }
             }
         }
         
@@ -203,6 +238,84 @@ class HomeController {
         }
         
         include 'app/view/shop/profile.php';
+    }
+    
+    // Thêm xe vào danh sách yêu thích
+    function add_to_wishlist() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+        }
+        
+        if(!isset($_SESSION['user'])) {
+            echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập để thêm vào yêu thích']);
+            exit();
+        }
+        
+        $car_id = $_POST['car_id'] ?? null;
+        $user_id = $_SESSION['user']['user_id'];
+        
+        if($car_id) {
+            if($this->wishlist->addToWishlist($user_id, $car_id)) {
+                echo json_encode(['success' => true, 'message' => 'Đã thêm vào danh sách yêu thích']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Xe này đã có trong danh sách yêu thích']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra']);
+        }
+        exit();
+    }
+    
+
+    function remove_from_wishlist() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+        }
+        
+        if(!isset($_SESSION['user'])) {
+            echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập']);
+            exit();
+        }
+        
+        $car_id = $_POST['car_id'] ?? null;
+        $user_id = $_SESSION['user']['user_id'];
+        
+        if($car_id) {
+            if($this->wishlist->removeFromWishlist($user_id, $car_id)) {
+                echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi danh sách yêu thích']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra']);
+        }
+        exit();
+    }
+    
+    // Hiển thị trang danh sách yêu thích
+    function wishlist() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if(!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit();
+        }
+        
+        $user_id = $_SESSION['user']['user_id'];
+        $wishlistItems = $this->wishlist->getUserWishlist($user_id);
+        
+        include 'app/view/shop/wishlist.php';
     }
 }
 ?>

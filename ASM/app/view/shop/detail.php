@@ -73,13 +73,22 @@
                 </div>
                 
 
-                <div class="flex space-x-4">
+                <div class="flex flex-wrap gap-4">
                     <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
                         Liên hệ mua xe
                     </button>
                     <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition">
                         Đặt lịch xem xe
                     </button>
+                    <?php if(isset($_SESSION['user'])): ?>
+                    <button onclick="toggleWishlist(<?php echo $car['car_id']; ?>, this)" 
+                            class="<?php echo isset($isInWishlist) && $isInWishlist ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-red-600'; ?> text-white px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2 heart-btn">
+                        <svg class="w-5 h-5" <?php echo isset($isInWishlist) && $isInWishlist ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor"'; ?> viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                        <?php echo isset($isInWishlist) && $isInWishlist ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'; ?>
+                    </button>
+                    <?php endif; ?>
                     <a href="index.php?page=product" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition inline-block">
                         ← Quay lại danh sách
                     </a>
@@ -87,18 +96,27 @@
             </div>
         </div>
         
-        <!-- Similar Cars Section -->
+     
         <?php if (!empty($recommendedCars)): ?>
         <div class="mt-12">
             <h2 class="text-2xl font-bold text-white mb-6 text-center">Xe tương tự</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php foreach ($recommendedCars as $recCar): ?>
-                    <?php if ($recCar['car_id'] != $car['car_id']): // Don't show the current car ?>
+                    <?php if ($recCar['car_id'] != $car['car_id']): ?>
                     <div class="bg-gray-800 rounded-lg shadow-lg p-4 border border-gray-700 hover:border-gray-500 transition-all duration-200">
-                        <div class="w-full h-32 bg-gray-700 rounded-lg overflow-hidden mb-3">
+                        <div class="relative w-full h-32 bg-gray-700 rounded-lg overflow-hidden mb-3">
                             <img src="<?php echo !empty($recCar['image_url']) ? $recCar['image_url'] : 'public/layout/img/hinh1.webp'; ?>" 
                                  alt="<?php echo htmlspecialchars($recCar['car_name']); ?>" 
                                  class="w-full h-full object-cover">
+                            
+                            <?php if(isset($_SESSION['user'])): ?>
+                            <button onclick="toggleWishlist(<?php echo $recCar['car_id']; ?>, this)" 
+                                    class="absolute top-1 right-1 bg-gray-600 hover:bg-red-600 text-white p-1 rounded-full shadow-lg transition-colors duration-200 heart-btn">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </button>
+                            <?php endif; ?>
                         </div>
                         <h3 class="font-semibold text-lg text-white mb-2 truncate"><?php echo htmlspecialchars($recCar['car_name']); ?></h3>
                         <p class="text-gray-300 font-bold mb-2"><?php echo number_format($recCar['price']); ?> VNĐ</p>
@@ -123,3 +141,66 @@
     <?php endif; ?>
 </div>
 </main>
+
+
+<script>
+function toggleWishlist(carId, button) {
+    const svg = button.querySelector('svg');
+    const isInWishlist = svg.getAttribute('fill') === 'currentColor';
+    
+    const action = isInWishlist ? 'remove_from_wishlist' : 'add_to_wishlist';
+    
+    fetch('index.php?page=' + action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'car_id=' + carId
+    })
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(text => {
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Response is not valid JSON:', text);
+            throw new Error('Response is not valid JSON');
+        }
+        
+        if(data.success) {
+           
+            if(isInWishlist) {
+               
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                button.classList.add('bg-gray-600', 'hover:bg-red-600');
+                button.innerHTML = svg.outerHTML + ' Thêm vào yêu thích';
+            } else {
+                
+                svg.setAttribute('fill', 'currentColor');
+                svg.setAttribute('stroke', 'none');  
+                button.classList.remove('bg-gray-600', 'hover:bg-red-600');
+                button.classList.add('bg-red-600', 'hover:bg-red-700');
+                button.innerHTML = svg.outerHTML + ' Xóa khỏi yêu thích';
+            }
+            
+            
+            alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+        alert('Có lỗi xảy ra, vui lòng thử lại');
+    });
+}
+</script>
