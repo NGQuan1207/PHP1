@@ -59,8 +59,14 @@ class HomeController {
         $carTypes = $this->car->getAllCarTypes();
         
         $selected_type = isset($_GET['type_id']) ? $_GET['type_id'] : null;
+        $search = isset($_GET['search']) ? trim($_GET['search']) : null;
         
-        if($selected_type) {
+
+        if($search && !empty($search)) {
+            
+            $car_all = $this->car->searchCars($search, $selected_type);
+            
+        } elseif($selected_type) {
             $car_all = $this->car->getCarsByType($selected_type);
         } else {
             $car_all = $this->car->getAllCars();
@@ -68,7 +74,7 @@ class HomeController {
         
         $userWishlist = $this->getUserWishlistArray();
         
-        if(!isset($_GET['trang'])) {
+        if(!isset($_GET['trang']) || ($search && !empty($search))) {
             $trang_hien_tai = 1;
         } else {
             $trang_hien_tai = $_GET['trang'];

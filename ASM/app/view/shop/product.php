@@ -5,17 +5,54 @@
         <p class="text-gray-400">Khám phá bộ sưu tập xe của chúng tôi</p>
     </div>
     
-    <!-- Category Filter Section -->
+    <div class="mb-8">
+        <form action="index.php" method="GET" class="max-w-md mx-auto">
+            <input type="hidden" name="page" value="product">
+            <?php if (isset($_GET['type_id'])) : ?>
+                <input type="hidden" name="type_id" value="<?php echo $_GET['type_id']; ?>">
+            <?php endif; ?>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="text" name="search" 
+                       value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                       placeholder="Tìm kiếm xe theo tên hoặc hãng..."
+                       class="block w-full pl-10 pr-12 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <button type="submit" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <span class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
+                        Tìm
+                    </span>
+                </button>
+            </div>
+        </form>
+        <?php if (isset($_GET['search']) && !empty($_GET['search'])) : ?>
+            <div class="text-center mt-4">
+                <p class="text-gray-300">
+                    Tìm thấy <?php echo count($cars) > 0 ? $tongsp : 0; ?> kết quả cho: 
+                    <span class="font-semibold text-white">"<?php echo htmlspecialchars($_GET['search']); ?>"</span>
+                    <a href="index.php?page=product<?php echo isset($_GET['type_id']) ? '&type_id=' . $_GET['type_id'] : ''; ?>" 
+                       class="ml-2 text-blue-400 hover:text-blue-300">
+                        ✕ Xóa tìm kiếm
+                    </a>
+                </p>
+            </div>
+        <?php endif; ?>
+    </div>
+    
     <div class="mb-8">
         <h3 class="text-xl font-semibold text-white mb-4">Lọc theo loại xe:</h3>
         <div class="flex flex-wrap gap-3">
-            <a href="index.php?page=product" 
+            <?php $search_param = isset($_GET['search']) && !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>
+            <a href="index.php?page=product<?php echo $search_param; ?>" 
                class="px-4 py-2 rounded-lg transition-colors <?php echo !isset($_GET['type_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'; ?>">
                 Tất cả
             </a>
             <?php if (!empty($carTypes)) : ?>
                 <?php foreach ($carTypes as $type) : ?>
-                    <a href="index.php?page=product&type_id=<?php echo $type['type_id']; ?>" 
+                    <a href="index.php?page=product&type_id=<?php echo $type['type_id']; ?><?php echo $search_param; ?>" 
                        class="px-4 py-2 rounded-lg transition-colors <?php echo (isset($_GET['type_id']) && $_GET['type_id'] == $type['type_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'; ?>">
                         <?php echo htmlspecialchars($type['type_name']); ?>
                     </a>
@@ -57,10 +94,13 @@
     <div class="flex justify-center mt-8">
         <div class="flex space-x-2">
             <?php 
-            $type_param = isset($_GET['type_id']) ? '&type_id=' . $_GET['type_id'] : '';
+            $params = [];
+            if (isset($_GET['type_id'])) $params[] = 'type_id=' . $_GET['type_id'];
+            if (isset($_GET['search']) && !empty($_GET['search'])) $params[] = 'search=' . urlencode($_GET['search']);
+            $param_string = !empty($params) ? '&' . implode('&', $params) : '';
             ?>
             <?php if ($trang_hien_tai > 1) : ?>
-                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai - 1; ?><?php echo $type_param; ?>" 
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai - 1; ?><?php echo $param_string; ?>" 
                    class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                    « Trước
                 </a>
@@ -70,7 +110,7 @@
                 <?php if ($i == $trang_hien_tai) : ?>
                     <span class="px-4 py-2 bg-blue-600 text-white rounded font-bold"><?php echo $i; ?></span>
                 <?php else : ?>
-                    <a href="index.php?page=product&trang=<?php echo $i; ?><?php echo $type_param; ?>" 
+                    <a href="index.php?page=product&trang=<?php echo $i; ?><?php echo $param_string; ?>" 
                        class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                        <?php echo $i; ?>
                     </a>
@@ -78,7 +118,7 @@
             <?php endfor; ?>
             
             <?php if ($trang_hien_tai < $sotrang) : ?>
-                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai + 1; ?><?php echo $type_param; ?>" 
+                <a href="index.php?page=product&trang=<?php echo $trang_hien_tai + 1; ?><?php echo $param_string; ?>" 
                    class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">
                    Sau »
                 </a>

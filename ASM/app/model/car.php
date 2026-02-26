@@ -68,19 +68,39 @@ class Car {
         return $this->db->getAll($sql);
     }
 
-    // phương thức thêm xe mới
+    // tìm kiếm
+    public function searchCars($searchTerm, $type_id = null): array {
+        $searchTerm = addslashes($searchTerm);
+        
+        $sql = "SELECT c.*, b.brand_name, t.type_name FROM cars c 
+                JOIN brands b ON c.brand_id = b.brand_id 
+                JOIN car_types t ON c.type_id = t.type_id 
+                WHERE (c.car_name LIKE '%{$searchTerm}%' OR b.brand_name LIKE '%{$searchTerm}%')";
+        
+        if ($type_id) {
+            $sql .= " AND c.type_id = {$type_id}";
+        }
+        
+        $sql .= " ORDER BY c.car_id DESC";
+        
+        return $this->db->getAll($sql);
+    }
+
+
+
+    // thêm xe mới
     public function addCar($car_name, $brand_id, $type_id, $price, $description, $image_url) {
         $sql = "INSERT INTO cars (car_name, brand_id, type_id, price, description, image_url) 
                 VALUES ('$car_name', '$brand_id', '$type_id', '$price', '$description', '$image_url')";
         $this->db->action($sql);
     }
-    // phương thức xoá xe
+    //  xoá xe
     public function deleteCar($car_id) {
         $sql = "DELETE FROM cars WHERE car_id = $car_id";
         return $this->db->action($sql);
     }
     
-    // phương thức cập nhật xe
+    // cập nhật xe
     public function updateCar($car_id, $car_name, $brand_id, $type_id, $price, $description, $image_url = null) {
         if ($image_url) {
             $sql = "UPDATE cars SET car_name = '$car_name', brand_id = '$brand_id', type_id = '$type_id', 
@@ -94,39 +114,39 @@ class Car {
         return $this->db->action($sql);
     }
     
-    // phương thức lấy tất cả thương hiệu
+    //  lấy tất cả thương hiệu
     public function getAllBrands(): array {
         $sql = "SELECT brand_id, brand_name FROM brands ORDER BY brand_name";
         return $this->db->getAll($sql);
     }
     
-    // phương thức đếm tổng số xe
+    // đếm tổng số xe
     public function getCarCount(): int {
         $sql = "SELECT COUNT(*) as total FROM cars";
         $result = $this->db->getAll($sql);
         return $result[0]['total'] ?? 0;
     }
     
-    // phương thức đếm tổng số loại xe 
+    // đếm tổng số loại xe 
     public function getCarTypeCount(): int {
         $sql = "SELECT COUNT(*) as total FROM car_types";
         $result = $this->db->getAll($sql);
         return $result[0]['total'] ?? 0;
     }
     
-    // phương thức lấy loại xe theo id
+    //  lấy loại xe theo id
     public function getCarTypeById($type_id): array {
         $sql = "SELECT * FROM car_types WHERE type_id = {$type_id}";
         return $this->db->getAll($sql);
     }
     
-    // phương thức thêm loại xe mới
+    //  thêm loại xe mới
     public function addCarType($type_name, $image_url) {
         $sql = "INSERT INTO car_types (type_name, img) VALUES ('$type_name', '$image_url')";
         return $this->db->action($sql);
     }
     
-    // phương thức cập nhật loại xe
+    //  cập nhật loại xe
     public function updateCarType($type_id, $type_name, $image_url = null) {
         if ($image_url) {
             $sql = "UPDATE car_types SET type_name = '$type_name', img = '$image_url' WHERE type_id = '$type_id'";
