@@ -1,18 +1,20 @@
 <?php
 class OrderController {
     private $order;
-    
     public function __construct() {
         $this->order = new Order();
     }
-    
     public function list() {
         $orders = $this->order->getAllOrders();
-        include 'app/view/order_list.php';
+        include 'app/view/header.php';
+        include 'app/view/home.php';
+        include 'app/view/footer.php';
     }
     
     public function addform() {
-        include 'app/view/order_form.php';
+        include 'app/view/header.php';
+        include 'app/view/addcart.php';
+        include 'app/view/footer.php';
     }
     
     public function add() {
@@ -28,7 +30,9 @@ class OrderController {
                 exit();
             }
         }
-        include 'app/view/order_form.php';
+        include 'app/view/header.php';
+        include 'app/view/addcart.php';
+        include 'app/view/footer.php';
     }
     
     public function delete() {
